@@ -1,0 +1,9 @@
+body 
+{
+	font-family: Monospace;
+	font-weight: bold;
+	background-image: url("../images/gridme.png");
+	background-color: #ffffff;
+	margin: 0px;
+	overflow: hidden;
+}
