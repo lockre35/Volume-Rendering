@@ -55,7 +55,7 @@ function handleKeyPress(event)
 ///////////////////////////////////////
 //Set up listeners to draw a function//
 ///////////////////////////////////////
-
+//http://homepage.univie.ac.at/herwig.hauser/bildergalerie/gallery.html
 //If the function button is clicked
 document.getElementById("functionOpen").onclick = function () {   
 	var values = new Array();
@@ -75,6 +75,11 @@ function getFunctionValue(x,y,z)
 		case "Crazy":
 			result = Math.sin(x*y+x*z+y*z) + Math.sin(x*y) + Math.sin(y*z) + Math.sin(x*z) - 1;
 			break;
+		case "Distel":
+			result = x*x + y*y + z*z + 1000 * (x*x + y*y) * (x*x + z*z) * (y*y + z*z);
+			break;
+		case "Heart":
+			result = (x*x + 9/4*y*y + z*z - 1)*(x*x + 9/4*y*y + z*z - 1)*(x*x + 9/4*y*y + z*z - 1) - x*x*z*z*z - 9/80*y*y*z*z*z;
 	}
 	return result;
 } 
