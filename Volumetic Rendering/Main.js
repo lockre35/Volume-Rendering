@@ -2,12 +2,12 @@
 //Global variables
 var binaryFile = new Array();
 var values = new Array();
-var sliceSize = 173;
-var xLength = 512;
-var yLength = 512;
-var zLength = 174;
-var marchingCubeSize=1;
-var isoValue = 150;
+var sliceSize = 51;
+var xLength = 256;
+var yLength = 256;
+var zLength = 256;
+var marchingCubeSize=2;
+var isoValue = 45;
 var destroy = false;
 var renderFunction = false;
 
@@ -59,7 +59,45 @@ document.getElementById("functionButton").onclick = function () {
 	renderFunction = true;
 	init();
 	animate();
-};      
+};    
+  
+	// ...
+	var oReq = new XMLHttpRequest();
+
+	function transferFailed(evt) {
+	  alert("An error occurred while transferring the file.");
+	}
+
+	function transferCanceled(evt) {
+	  alert("The transfer has been canceled by the user.");
+	}
+	
+//If the server skull is clicked
+document.getElementById("skullButton").onclick = function () {   
+
+	oReq.addEventListener("progress", updateProgress, false);
+	oReq.addEventListener("load", transferComplete, false);
+	oReq.addEventListener("error", transferFailed, false);
+	oReq.addEventListener("abort", transferCanceled, false);
+	oReq.open("GET", "Skull.txt",true);
+	
+	// progress on transfers from the server to the client (downloads)
+	function updateProgress (oEvent) {
+		var percentComplete = oEvent.loaded / 44462127;
+		console.log(percentComplete);
+	}
+
+	function transferComplete(evt) {
+	  alert("The transfer is complete.");
+		eval(oReq.responseText);
+		addSkull();
+	  	renderFunction = false;
+		init();
+		animate();
+	}
+	
+	oReq.send();
+};  
 
 //Function to generate a surface based on a function
 function getFunctionValue(x,y,z)
@@ -76,12 +114,11 @@ document.getElementById("browseOpen").onchange = function () {
 	fr.onloadend = function () {
 		values = new Array();
 		destroy = false;
-		//setInput(this.result);
 		$( "#progressbar" ).progressbar({
 		  value: 0
+		  
 		});
 		worker.postMessage({'command': 'start', 'input':this.result});
-		//parser(this.result,values);
 	};
 	fr.readAsBinaryString(this.files[0]);
 };
@@ -188,7 +225,7 @@ function render()
 // Marching Cubes Algorithm
 function marchLayer(lowSliceLimit, upperSliceLimit, shift, marchCubeSize, xLength, yLength, zLength, isolevel)
 {
-	var zSpacing = 3;
+	var zSpacing = 1;
 	// Vertices may occur along edges of cube, when the values at the edge's endpoints
 	//   straddle the isolevel value.
 	// Actual position along edge weighted according to function values.
@@ -555,9 +592,6 @@ function marchLayerFunction(lowSliceLimit, upperSliceLimit, shift, marchCubeSize
 	var colorMaterial =  new THREE.MeshLambertMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
 	var mesh = new THREE.Mesh( geometry, colorMaterial );
 
-	mesh.position.x+= 250;
-	mesh.position.y+= 250;
-	mesh.position.z-= 250;
 	//mesh.rotation.y = (Math.PI/180)*90;
 	return mesh;
 }

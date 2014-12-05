@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="us">
 <head>
 	<title>Marching Cubes</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link href="css/jquery-ui.css" rel="stylesheet">
 	<link rel=stylesheet href="css/base.css"/>
 </head>
 <body>
@@ -22,21 +23,60 @@
 <!-- jQuery code to display an information button and box when clicked. -->
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/jquery-ui.js"></script>
-<link rel=stylesheet href="css/jquery-ui.css" />
-<link rel=stylesheet href="css/info.css"/>
 <script src="js/info.js"></script>
-
-<div id="infoButton"></div>
-<div id="uploadButton"></div>
-<button id="functionButton">Function</button>
-<div id="infoBox" title="Demo Information">
-This three.js demo is part of a collection at
-<a href="http://stemkoski.github.io/Three.js/">http://stemkoski.github.io/Three.js/</a>
+<div id="navBar" style="position:absolute; height:44px; background-color:#E84343; width:100%; z-index:2; padding-top: 8px; padding-top: 6px; padding-left: 6px;">
+	<button id="objectButton" style="font-size: 14px;">Select Object</button>
+	<button id="settingsButton" style="font-size: 14px">Settings</button>
+	<button id="renderButton" style="font-size: 14px; float:right; margin-right:12px; height:30px;"><span class="ui-icon ui-icon-circle-triangle-e"></span></button>
+	<div id="functionButton">Function</div>
+	<div id="skullButton">Skull</div>
 </div>
+
+<div id="uploadButton"></div>
 
 <div id="uploadBox" title="Upload Box">
  <input id="browseOpen" type="file" style="margin-top:10px"/>
  <br/>
+ <div id="progressbar" style="margin-top:20px"></div>
+</div>
+
+<div id="objectBox" title="Select Object To Render" style="padding-left: 0px; padding-right: 0px; width:324px">
+ <button id="serverOpen" style="margin-top: -27px;margin-right: 4px; width:161px;">Load 3D File</button>
+  <input id="browseOpen" type="file" placeholder="Upload" style="display:none;"/>
+     <select name="serverFiles" id="serverFiles" style='width:151px; height:35px'>
+     <option>Skull.txt</option>
+  </select>
+
+ <button id="functionOpen" style="width:161px; margin-right: 4px;margin-top: 5px;">Load Function</button>
+ <input type="text" style="width: 113px; margin: 0px; margin-top: 5px;"/>
+ 
+ <button id="fileButton" style="margin-top: 8px; margin-left: 63px;">Upload A Local File</button>
+</div>
+
+<div id="settingsBox" title="Algorithm Settings" style="padding-left: 0px; padding-right: 0px; width:324px">
+	<p>
+		<label for="xLength" style="margin-left: 14px;">X Length</label>
+		<input type="text" name="xLength" id="xLength"  style="width: 113px;float: right;"/>
+	</p>
+	<p style="margin-top: 25px;">
+		<label for="yLength" style="margin-left: 14px;">Y Length</label>
+		<input type="text" name="yLength" id="yLength"  style="width: 113px;float: right;"/>
+	</p>
+	<p style="margin-top: 25px;">
+		<label for="zLength" style="margin-left: 14px;">Z Length</label>
+		<input type="text" name="zLength" id="zLength"  style="width: 113px;float: right;"/>
+	</p>
+	<p style="margin-top: 25px;">
+		<label for="cubeSize" style="margin-left: 14px;">Cube Size</label>
+		<input type="text" name="cubeSize" id="cubeSize"  style="width: 113px;float: right;"/>
+	</p>
+	<p style="margin-top: 25px;">
+		<label for="isovalue" style="margin-left: 14px;">Isovalue</label>
+		<input id="spinner" name="spinner" value="45" style="width: 84px;float: right; height: 14px;">
+	</p>
+</div>
+
+<div id="progressBox" title="Loading Object Data">
  <div id="progressbar" style="margin-top:20px"></div>
 </div>
 
