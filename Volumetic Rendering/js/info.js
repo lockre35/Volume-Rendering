@@ -8,10 +8,6 @@ $(function()
 	//Set z index
 	var dialogZindex =  101;
 	
-	//Open buttons
-	$("#browseOpen")
-    .button();
-	
 	$("#functionOpen")
 	.button();
 	
@@ -28,6 +24,15 @@ $(function()
 	{
 	   "height":"35px"
 	});
+	
+	$("#shapes")
+	.selectmenu();
+	
+	$("#shapes-button").css( 
+	{
+	   "height":"35px"
+	});
+	
 	
 	$('.ui-selectmenu-open').css('z-index', dialogZindex);
 	$('.ui-selectmenu-button').click( function() { dialogZindex+= 1; $('.ui-selectmenu-open').css('z-index', dialogZindex); });
@@ -86,6 +91,7 @@ $(function()
 		buttons: {
         Ok: function() {
           $( this ).dialog( "close" );
+		  updateSettings();
         }
       }
 	});
@@ -96,13 +102,7 @@ $(function()
 		
 		
 	$("#renderButton")
-    .button()
-	.click( 
-		function() 
-		{ 
-			$("#objectBox").dialog("open");
-		});	
-		
+    .button();		
 		
 		
 	$("#uploadBox")

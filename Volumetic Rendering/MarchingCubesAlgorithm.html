@@ -16,6 +16,7 @@
 <script src="js/THREEx.KeyboardState.js"></script>
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
+<script src="js/underscore.js"></script>
 
 <!-- Contains Lookup Tables for the Marching Cubes Algorithm -->
 <script src="js/MarchingCubesData.js"></script>
@@ -28,29 +29,24 @@
 	<button id="objectButton" style="font-size: 14px;">Select Object</button>
 	<button id="settingsButton" style="font-size: 14px">Settings</button>
 	<button id="renderButton" style="font-size: 14px; float:right; margin-right:12px; height:30px;"><span class="ui-icon ui-icon-circle-triangle-e"></span></button>
-	<div id="functionButton">Function</div>
-	<div id="skullButton">Skull</div>
 </div>
 
-<div id="uploadButton"></div>
 
-<div id="uploadBox" title="Upload Box">
- <input id="browseOpen" type="file" style="margin-top:10px"/>
- <br/>
- <div id="progressbar" style="margin-top:20px"></div>
-</div>
 
 <div id="objectBox" title="Select Object To Render" style="padding-left: 0px; padding-right: 0px; width:324px">
  <button id="serverOpen" style="margin-top: -27px;margin-right: 4px; width:161px;">Load 3D File</button>
-  <input id="browseOpen" type="file" placeholder="Upload" style="display:none;"/>
+  <input id="browseOpen" type="file" style="display:none;"/>
      <select name="serverFiles" id="serverFiles" style='width:151px; height:35px'>
      <option>Skull.txt</option>
   </select>
 
- <button id="functionOpen" style="width:161px; margin-right: 4px;margin-top: 5px;">Load Function</button>
- <input type="text" style="width: 113px; margin: 0px; margin-top: 5px;"/>
+ <button id="functionOpen" style="margin-top: -27px;width:161px; margin-right: 4px;">Load Function</button>
+     <select name="shapes" id="shapes" style='width:151px; height:35px; margin-top:5px;'>
+     <option>Circle</option>
+	 <option>Crazy</option>
+  </select>
  
- <button id="fileButton" style="margin-top: 8px; margin-left: 63px;">Upload A Local File</button>
+ <button id="fileButton" style="margin-top: 2px; margin-left: 63px;">Upload A Local File</button>
 </div>
 
 <div id="settingsBox" title="Algorithm Settings" style="padding-left: 0px; padding-right: 0px; width:324px">

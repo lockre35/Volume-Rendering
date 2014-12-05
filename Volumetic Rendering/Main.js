@@ -6,10 +6,157 @@ var sliceSize = 51;
 var xLength = 256;
 var yLength = 256;
 var zLength = 256;
-var marchingCubeSize=2;
+var marchingCubeSize=4;
 var isoValue = 45;
-var destroy = false;
-var renderFunction = false;
+var renderFunction = true;
+var shapeFunction = "Circle";
+var serverFileName = "Skull.txt";
+var first = true;
+
+//Variables updated by renderer function
+var upperLimit = sliceSize;
+var lowerLimit = 0;
+var shift = 0;
+var rendered = false;
+var pauseAnimation = false;
+
+////////////////////////////////////////////
+//Declare listeners for the user interface//
+////////////////////////////////////////////
+
+//Settings button listener
+document.getElementById("settingsButton").onclick = function ()
+{
+	$("#xLength").val(xLength);
+	$("#yLength").val(yLength);
+	$("#zLength").val(zLength);
+	$("#cubeSize").val(marchingCubeSize);
+	$("#spinner").val(isoValue);
+};
+
+//Update values based on what was select in the settings dialog
+function updateSettings()
+{
+	xLength=parseInt($("#xLength").val(), 10);
+	yLength=parseInt($("#yLength").val(), 10);
+	zLength=parseInt($("#zLength").val(), 10);
+	marchingCubeSize=parseFloat($("#cubeSize").val());
+	isoValue=parseInt($("#spinner").val(), 10);
+};
+
+//Handle camera controls
+function handleKeyPress(event)
+{
+  var ch = getChar(event);
+  if (cameraControl(camera, ch)) return;
+}
+
+
+///////////////////////////////////////
+//Set up listeners to draw a function//
+///////////////////////////////////////
+
+//If the function button is clicked
+document.getElementById("functionOpen").onclick = function () {   
+	var values = new Array();
+	renderFunction = true;
+	shapeFunction = $("#shapes").val();
+	$("#objectBox").dialog("close");
+};
+
+//Function to generate a surface based on a function
+function getFunctionValue(x,y,z)
+{
+	switch(shapeFunction)
+	{
+		case "Circle":
+			result = x*x + y*y + z*z - 10000;
+			break;
+		case "Crazy":
+			result = Math.sin(x*y+x*z+y*z) + Math.sin(x*y) + Math.sin(y*z) + Math.sin(x*z) - 1;
+			break;
+	}
+	return result;
+} 
+  
+  
+  
+  
+///////////////////////////////////////////////////////////////////
+//Set up request and listeners to load a file found on the server//
+///////////////////////////////////////////////////////////////////
+document.getElementById("serverOpen").onclick = function ()
+{
+	var values = new Array();
+	serverFileName = $("#serverFiles").val();
+	$("#objectBox").dialog("close");
+	$( "#progressbar" ).progressbar({
+	  value: 0
+	});
+	$("#progressBox").dialog("open");
+	loadServerObject();
+};
+ 
+ 
+//Set up XMLHttpRequest to obtain a javascript array from the server
+var oReq = new XMLHttpRequest();
+
+function transferFailed(evt) {
+  alert("An error occurred while transferring the file.");
+}
+
+function transferCanceled(evt) {
+  alert("The transfer has been canceled by the user.");
+}
+	
+//Load the server object
+function loadServerObject() 
+{   
+	oReq.addEventListener("progress", updateProgress, false);
+	oReq.addEventListener("load", transferComplete, false);
+	oReq.addEventListener("error", transferFailed, false);
+	oReq.addEventListener("abort", transferCanceled, false);
+	oReq.open("GET", serverFileName,true);
+	
+	// progress on transfers from the server to the client (downloads)
+	function updateProgress (oEvent) {
+		var percentComplete = oEvent.loaded / 44462127;
+		$( "#progressbar" ).progressbar({
+			  value: percentComplete*100
+			});
+		console.log(percentComplete);
+	}
+
+	// once the transfer is complete we load the values
+	function transferComplete(evt) {
+		eval(oReq.responseText);
+		switch(serverFileName)
+		{
+			case "Skull.txt":
+				addSkull();
+				break;
+		}
+		$("#progressBox").dialog("close");
+		renderFunction = false;
+	}
+	
+	oReq.send();
+};  
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//Set up web worker and listeners for loading a local file from client machine//
+////////////////////////////////////////////////////////////////////////////////
+
+//If the upload file button is pressed
+document.getElementById("fileButton").onclick = function ()
+{
+	document.getElementById("browseOpen").click();
+}
 
 worker = new Worker('ParseWorker.js');
 worker.addEventListener('message', receiveMessage);
@@ -22,8 +169,8 @@ function receiveMessage(e) {
 			$( "#progressbar" ).progressbar({
 			  value: 100
 			});
-			init();
-			animate();
+			renderFunction = false;
+			$("#progressBox").dialog("close");
 			break;
 		case 'partial':
 			console.log(data.percentage+"0% done");
@@ -43,85 +190,46 @@ function receiveMessage(e) {
 	}
 }
 
-////////////////////////////////////////////
-//Declare listeners for the user interface//
-////////////////////////////////////////////
-
-//Handle camera controls
-function handleKeyPress(event)
-{
-  var ch = getChar(event);
-  if (cameraControl(camera, ch)) return;
-}
-
-//If the function button is clicked
-document.getElementById("functionButton").onclick = function () {   
-	renderFunction = true;
-	init();
-	animate();
-};    
-  
-	// ...
-	var oReq = new XMLHttpRequest();
-
-	function transferFailed(evt) {
-	  alert("An error occurred while transferring the file.");
-	}
-
-	function transferCanceled(evt) {
-	  alert("The transfer has been canceled by the user.");
-	}
-	
-//If the server skull is clicked
-document.getElementById("skullButton").onclick = function () {   
-
-	oReq.addEventListener("progress", updateProgress, false);
-	oReq.addEventListener("load", transferComplete, false);
-	oReq.addEventListener("error", transferFailed, false);
-	oReq.addEventListener("abort", transferCanceled, false);
-	oReq.open("GET", "Skull.txt",true);
-	
-	// progress on transfers from the server to the client (downloads)
-	function updateProgress (oEvent) {
-		var percentComplete = oEvent.loaded / 44462127;
-		console.log(percentComplete);
-	}
-
-	function transferComplete(evt) {
-	  alert("The transfer is complete.");
-		eval(oReq.responseText);
-		addSkull();
-	  	renderFunction = false;
-		init();
-		animate();
-	}
-	
-	oReq.send();
-};  
-
-//Function to generate a surface based on a function
-function getFunctionValue(x,y,z)
-{
-	result = x*x + y*y + z*z - 10000;
-	return result;
-} 
-
-
 //If a new file is uploaded
 document.getElementById("browseOpen").onchange = function () {         
-	destroy = true;
+	values = new Array();
 	var fr = new FileReader();
 	fr.onloadend = function () {
 		values = new Array();
-		destroy = false;
+		$("#objectBox").dialog("close");
 		$( "#progressbar" ).progressbar({
 		  value: 0
-		  
 		});
+		$("#progressBox").dialog("open");
 		worker.postMessage({'command': 'start', 'input':this.result});
 	};
 	fr.readAsBinaryString(this.files[0]);
 };
+
+
+//Button to render the scene
+document.getElementById("renderButton").onclick = function ()
+{
+	pauseAnimation = true;
+	upperLimit = sliceSize;
+	lowerLimit = 0;
+	shift = 0;
+	rendered = false;
+	if(!first)
+	{
+		clean();
+		init2();
+		pauseAnimation = false;
+	}
+	else
+	{
+		init();
+		pauseAnimation = false;
+		animate();
+	}
+}
+
+
 
 //When the page is loaded
 function start()
@@ -142,6 +250,7 @@ var clock = new THREE.Clock();
 // FUNCTIONS 		
 function init() 
 {
+	first = false;
 	// SCENE
 	scene = new THREE.Scene();
 	// CAMERA
@@ -172,6 +281,11 @@ function init()
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
 	
+	init2();
+}
+
+function init2()
+{
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
 	light.position.set(-512,0,0);
@@ -181,12 +295,24 @@ function init()
 	scene.add( new THREE.AxisHelper(100) );
 }
 
+//Clean
+function clean()
+{
+	if(!first)
+	{
+		var objsToRemove = _.rest(scene.children, 1);
+		_.each(objsToRemove, function( object ) {
+			  scene.remove(object);
+		});
+	}
+}
+
 //Animation
 function animate() 
 {
-	if(!destroy)
+	if(!pauseAnimation)
 	{
-	    requestAnimationFrame( animate );
+		requestAnimationFrame( animate );
 		if(renderFunction)
 		{
 			renderFunctions();
@@ -206,16 +332,16 @@ function update()
 	stats.update();
 }
 
-//Variables updated by renderer function
-var upperLimit = sliceSize;
-var lowerLimit = 0;
-var shift = 0;
+
 function render() 
 {
-	if(upperLimit<zLength)
+	if(upperLimit<zLength && !rendered)
 	{
 		scene.add(marchLayer(lowerLimit,upperLimit,shift,marchingCubeSize, xLength, yLength, zLength, isoValue));
 		shift+=2;
+	}else
+	{
+		rendered = true;
 	}
 	lowerLimit+=sliceSize;
 	upperLimit+=sliceSize;
@@ -408,7 +534,6 @@ function marchLayer(lowSliceLimit, upperSliceLimit, shift, marchCubeSize, xLengt
 }
 
 //Variables updated by renderer function
-var rendered = false;
 function renderFunctions() 
 {
 	if(!rendered)
