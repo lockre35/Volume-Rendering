@@ -75,7 +75,7 @@ Below are some settings that help render different objects correctly.  If you ar
     IsoValue: 0
 
 ##References
-The code in custom-ui.js, ParseWorker.js, and MarchingCubeAlgorithm.html was all written by me.  Much of Main.js was also written by me however part of the algorithm for maching cubes was adapted from the Paul Bourke paper.  This includes the lines dedicated to using the look up table provided in MarchingCubeEdges.js which was taken from the Paul Bourke paper as well.  A majority of the other files in the application were not written by me but only provide Three.js support.
+The code in custom-ui.js, ParseWorker.js, and MarchingCubeAlgorithm.html was all written by me.  Much of Main.js was also written by me however part of the algorithm for marching cubes was adapted from the Paul Bourke paper.  This includes the lines dedicated to using the look up table provided in MarchingCubeEdges.js which was taken from the Paul Bourke paper as well.  A majority of the other files in the application were not written by me but only provide Three.js support and design.
 * Gallery of geometric functions (http://homepage.univie.ac.at/herwig.hauser/bildergalerie/gallery.html)
 * Marching cube algorithm (http://paulbourke.net/geometry/polygonise/)
 * Three.js marching cubes (http://stemkoski.github.io/Three.js/Marching-Cubes.html)
