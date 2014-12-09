@@ -1,3 +1,16 @@
+<!--
+
+	ComS 336 - Project - MarchingCubesAlgorithm.html
+	Logan Laughery
+	12/8/14
+
+	
+	Description
+		User interface for the marching cube project.  A guide is described
+		in the readme.
+
+-->
+
 <!doctype html>
 <html lang="us">
 <head>
@@ -5,26 +18,21 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link href="css/jquery-ui.css" rel="stylesheet">
-	<link rel=stylesheet href="css/base.css"/>
+	<link rel=stylesheet href="css/site.css"/>
 </head>
 <body>
 
+<!-- Basic JS files for web.gl -->
 <script src="js/Three.js"></script>
 <script src="js/Detector.js"></script>
 <script src="js/Stats.js"></script>
-<script src="js/OrbitControls.js"></script>
 <script src="js/THREEx.KeyboardState.js"></script>
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
 <script src="js/underscore.js"></script>
 
-<!-- Contains Lookup Tables for the Marching Cubes Algorithm -->
-<script src="js/MarchingCubesData.js"></script>
 
-<!-- jQuery code to display an information button and box when clicked. -->
-<script src="js/jquery-1.9.1.js"></script>
-<script src="js/jquery-ui.js"></script>
-<script src="js/info.js"></script>
+
 <div id="navBar" style="position:absolute; height:38px; background-color:#E84343; width:100%; z-index:2; padding-top: 8px; padding-top: 6px; padding-left: 6px;">
 	<button id="objectButton" style="font-size: 14px;">Select Object</button>
 	<button id="settingsButton" style="font-size: 14px">Settings</button>
@@ -80,8 +88,14 @@
 
 
 <div id="ThreeJS" style="position: absolute; left:0px;"></div>
-<script src="CameraControls.js"></script>
-<script src="ParseWorker.js"></script>
-<script src="Main.js"></script>
+
+<!-- JS files needed that are specific to the marching cube algorithm and the user interface -->
+<script src="js/MarchingCubeEdges.js"></script>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/custom-ui.js"></script>
+<script src="js/CameraControls.js"></script>
+<script src="js/ParseWorker.js"></script>
+<script src="js/Main.js"></script>
 <script>window.onload = start</script>
 </body>
