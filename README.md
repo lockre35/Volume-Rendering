@@ -8,6 +8,7 @@ This application implements the marching cube algorithm using Three.js so that m
 
 The application can be found here 
 (http://softwarego.no-ip.biz/FinalProject/Volumetic%20Rendering/MarchingCubesAlgorithm.html).  Additional .raw 3D files can be downloaded here (http://www.volvis.org/).  To use the application, users need to select an object to render, update rendering settings, and render the file.
+The w,a,s,d keys can be used to move around the rendered scene.  J,K,L,I can be used to rotate the object.
 
 #####Select Object to Render
 * Press the Select Object button
